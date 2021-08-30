@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Common Css -->
+    <link rel="stylesheet" href="../static/style.css"/>
+    <link rel="shortcut icon" href="../static/movie.ico">
+
+    <title>한손영화|모든 영화를 리뷰하다</title>
+
+    <!-- Import Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@100;200;300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <!-- Javascript -->
+    <script src="../static/jquery-1.12.3.js"></script>
+    <script src="../static/index.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            post_movie()
+        })
+
+        function post_movie() {
+            $.ajax({
+                type: "GET",
+                url: "/post_movie",
+                data: {},
+                success: function (response) {
+                    reviews = response['all_reviews']
+
+                    for (let i = 0; i < 7; i++) {
+                        jbRandom = Math.random()
+                        x = Math.floor(jbRandom * 2001 + 1)
+                        let img_url = reviews[x]['img_url']
+                        let url = reviews[x]['url']
+
+                        temp_html = `<a href="${url}">
+                                     <img src="${img_url}" alt=""></a>`
+
+                        $('#post_movie').append(temp_html)
+                    }
+                }
+            })
+        }
+
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+
+
+
+    </script>
+    <style>
+        .font {
+            color: #1877F2;
+        }
+    </style>
+</head>
+
+<body>
+<div class="wrapper">
+    <header>
+        <div class="top-bar">
+            <span class="nav" onclick="openNav()">&#x2b;</span>
+            <div class="movie-logo">
+                <a class="logo" href="/main" style="cursor:auto">
+                    <img src="../static/logo.png" alt="HanSon-movie">
+                </a>
+            </div>
+            <div class="login">
+                <a href="/">로그아웃</a>
+            </div>
+            <div id="mySidenav" class="sidenav">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="#romance">로맨스</a>
+                <a href="#action">액션</a>
+                <a href="#comedy">코미디</a>
+                <a href="#ani">애니</a>
+                <a href="#thriller">스릴러</a>
+                <a href="#others">다른 영화</a>
+            </div>
+        </div>
+    </header>
+    <!-- End of Header -->
+
+    <!-- Main Container -->
+    <section class="main-container">
+        <h1 id="home"><span>&#9813 오늘의 베스트</span></h1>
+        <div class="main-box">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/3V-SWIEEM_M"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            <div class="main-info">
+                <div class="main-name">
+                    <h2 class="title">모가디슈</h2>
+                    <a class="more-btn" href="/review">리뷰보기 ></a>
+                </div>
+                <div class="main-score">
+                    <p>출연ㅣ <a href="https://movie.naver.com/movie/bi/pi/basic.naver?code=46666" target="_blank"><span
+                            class="font"> 김윤석,</span></a> <a
+                            href="https://movie.naver.com/movie/bi/pi/basic.naver?code=6761" target="_blank"><span
+                            class="font"> 조인성,</span></a> <a
+                            href="https://movie.naver.com/movie/bi/pi/basic.naver?code=4275" target="_blank"><span
+                            class="font"> 허준호</span></a></p>
+                </div>
+                <div class="main-text">
+                    <p>내전으로 고립된 낯선 도시, 모가디슈 지금부터 우리의 목표는 오로지 생존이다! 대한민국이 UN가입을 위해 동분서주하던 시기 1991년 소말리아의 수도 모가디슈에서는 일촉즉발의
+                        내전이 일어난다. 통신마저 끊긴 그 곳에 고립된 대한민국 대사관의 직원과 가족들은 총알과 포탄이 빗발치는 가운데, 살아남기 위해 하루하루를 버텨낸다. 그러던 어느 날 밤,
+                        북한 대사관의 일행들이 도움을 요청하며 문을 두드리는데… 목표는 하나, 모가디슈에서 탈출해야 한다!</p>
+
+                    <div class="youtube"><a href="https://www.youtube.com/watch?v=3V-SWIEEM_M" target="_blank">보러가기
+                        ></a></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--movie-list-->
+
+    <section class="list-box">
+        <h2 class="list-title" id="romance">로맨스</h2>
+        <div class="list-btn">
+            <div class="left-btn" id="romance-left"><img src="../static/left.png" alt="좌측버튼"/></div>
+            <div class="right-btn" id="romance-right"><img src="../static/right.png" alt="우측버튼"/></div>
+        </div>
+        <div class="list-over">
+            <div class="list-grid" id="romance-grid">
+                <a href="/romence_one"><img
+                        src="https://movie-phinf.pstatic.net/20210302_206/1614663012921ti8Yu_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/romence_two"><img
+                        src="https://movie-phinf.pstatic.net/20210108_237/1610088401252cCott_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/romence_three"><img
+                        src="https://movie-phinf.pstatic.net/20201229_134/16092193938388fcec_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/romence_four"><img
+                        src="https://movie-phinf.pstatic.net/20210217_83/1613533547319a4Nc6_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/romence_five"><img
+                        src="https://movie-phinf.pstatic.net/20210615_3/1623748505590DVbIq_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+            </div>
+        </div>
+
+        <h2 class="list-title" id="action">액션</h2>
+        <div class="list-btn">
+            <div class="left-btn" id="action-left"><img src="../static/left.png" alt="좌측버튼"/></div>
+            <div class="right-btn" id="action-right"><img src="../static/right.png" alt="우측버튼"/></div>
+        </div>
+        <div class="list-over">
+            <div class="list-grid" id="action-grid">
+                <a href="/action_one"><img
+                        src="https://movie-phinf.pstatic.net/20210617_272/1623906098516QjpeS_JPEG/movie_image.jpg"
+                        alt=""></a>
+                <a href="/action_two"><img
+                        src="https://movie-phinf.pstatic.net/20210421_37/1618971733493B4ykS_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/action_three"><img
+                        src="https://movie-phinf.pstatic.net/20210310_199/1615367075185E9pMt_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/action_four"><img
+                        src="https://movie-phinf.pstatic.net/20210707_1/1625644082274E6g2t_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/action_five"><img
+                        src="https://movie-phinf.pstatic.net/20210610_257/1623310010472XGTly_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+            </div>
+        </div>
+
+        <h2 class="list-title" id="comedy">코미디</h2>
+        <div class="list-btn">
+            <div class="left-btn" id="comedy-left"><img src="../static/left.png" alt="좌측버튼"/></div>
+            <div class="right-btn" id="comedy-right"><img src="../static/right.png" alt="우측버튼"/></div>
+        </div>
+        <div class="list-over">
+            <div class="list-grid" id="comedy-grid">
+                <a href="/comedy_one"><img
+                        src="https://movie-phinf.pstatic.net/20210120_178/1611108833957tp0l2_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/comedy_two"><img
+                        src="https://movie-phinf.pstatic.net/20210217_241/1613552832867Ef7Rb_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/comedy_three"><img
+                        src="https://movie-phinf.pstatic.net/20210702_157/1625218016668QQLWQ_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/comedy_four"><img
+                        src="https://movie-phinf.pstatic.net/20210427_144/1619487062509UBYeW_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/comedy_five"><img
+                        src="https://movie-phinf.pstatic.net/20210603_23/1622704695972mFTzK_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+            </div>
+        </div>
+
+        <h2 class="list-title" id="ani">애니</h2>
+        <div class="list-btn">
+            <div class="left-btn" id="ani-left"><img src="../static/left.png" alt="좌측버튼"/></div>
+            <div class="right-btn" id="ani-right"><img src="../static/right.png" alt="우측버튼"/></div>
+        </div>
+        <div class="list-over">
+            <div class="list-grid" id="ani-grid">
+                <a href="/ani_one"><img
+                        src="https://movie-phinf.pstatic.net/20210622_174/1624324910624JhEq2_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/ani_two"><img
+                        src="https://movie-phinf.pstatic.net/20210325_146/1616648170782LcQeF_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/ani_three"><img
+                        src="https://movie-phinf.pstatic.net/20210125_107/1611552642316gpqQH_JPEG/movie_image.jpg"
+                        alt=""></a>
+                <a href="/ani_four"><img
+                        src="https://movie-phinf.pstatic.net/20210708_257/1625728215707Oi5DA_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/ani_five"><img
+                        src="https://movie-phinf.pstatic.net/20210603_104/1622684157296bKxr2_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+            </div>
+        </div>
+
+        <h2 class="list-title" id="thriller">스릴러</h2>
+        <div class="list-btn">
+            <div class="left-btn" id="thriller-left"><img src="../static/left.png" alt="좌측버튼"/></div>
+            <div class="right-btn" id="thriller-right"><img src="../static/right.png" alt="우측버튼"/></div>
+        </div>
+        <div class="list-over">
+            <div class="list-grid" id="thriller-grid">
+                <a href="/thriller_one"><img
+                        src="https://movie-phinf.pstatic.net/20210504_148/1620107063299XMt1s_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/thriller_two"><img
+                        src="https://movie-phinf.pstatic.net/20210616_285/1623810005020XPJFm_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/thriller_three"><img
+                        src="https://movie-phinf.pstatic.net/20210610_18/16233093429042QIXx_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/thriller_four"><img
+                        src="https://movie-phinf.pstatic.net/20210721_115/1626832082638hCp4s_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+                <a href="/thriller_five"><img
+                        src="https://movie-phinf.pstatic.net/20210719_225/1626671578245ptE5v_JPEG/movie_image.jpg?type=m665_443_2"
+                        alt=""></a>
+            </div>
+        </div>
+        <h2 class="list-title" id="others">다른 영화</h2>
+        <div class="list-btn">
+            <div class="left-btn" id="list-left"><img src="../static/left.png" alt="좌측버튼"/></div>
+            <div class="right-btn" id="list-right"><img src="../static/right.png" alt="우측버튼"/></div>
+        </div>
+        <div class="list-over">
+            <div id="post_movie" class="list-grid">
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+
+</html>

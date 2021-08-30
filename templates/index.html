@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <title>한손리뷰 : 회원가입</title>
+    <link rel="shortcut icon" href="../static/movie.ico">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Nunito');
+        @import url('https://fonts.googleapis.com/css?family=Poiret+One');
+
+        * {
+            font-family: 'Nunito', sans-serif;
+            color: white;
+        }
+
+        body, html {
+            height: 100%;
+            background-repeat: no-repeat; /*background-image: linear-gradient(rgb(12, 97, 33),rgb(104, 145, 162));*/
+            background: black;
+            position: relative;
+        }
+
+        .box {
+            position: absolute;
+            z-index: 9999;
+            width: 800px;
+            margin: 40px auto 40px;
+            display: block;
+
+        }
+
+        #particles-js {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: 50% 50%;
+            position: fixed;
+            top: 0px;
+            z-index: 1;
+        }
+
+        .panel-body {
+            border: 1px solid black;
+            background: rgba(48, 46, 45, 1);
+        }
+
+        .form-control {
+            border-radius: 0px;
+            background: rgb(98, 96, 96);
+            border: 0px;
+            color: white;
+        }
+
+        .form-group {
+            color: white;
+        }
+
+        .panel-heading {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            width: 100px;
+            margin: auto auto auto auto;
+        }
+
+        .cancel {
+            display: inline-block;
+            width: 100px;
+            margin: auto auto auto auto;
+            align-content: center;
+
+        }
+
+        .center {
+            text-align: center;
+        }
+
+
+    </style>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $flag = 1;
+            $("#myName").focusout(function () {
+                if ($(this).val() == '') {
+                    $(this).css("border-color", "#FF0000");
+                    $('#submit').attr('disabled', true);
+                    $("#error_name").text("* 이름을 입력하세요!");
+                } else {
+                    $(this).css("border-color", "#2eb82e");
+                    $('#submit').attr('disabled', false);
+                    $("#error_name").text("");
+
+                }
+            });
+            $("#id").focusout(function () {
+                if ($(this).val() == '') {
+                    $(this).css("border-color", "#FF0000");
+                    $('#submit').attr('disabled', true);
+                    $("#error_id").text("* 아이디를 입력하세요!");
+                } else {
+                    $(this).css("border-color", "#2eb82e");
+                    $('#submit').attr('disabled', false);
+                    $("#error_id").text("");
+                }
+            });
+            $("#dob").focusout(function () {
+                if ($(this).val() == '') {
+                    $(this).css("border-color", "#FF0000");
+                    $('#submit').attr('disabled', true);
+                    $("#error_dob").text("* 생년월일을 입력하세요!");
+                } else {
+                    $(this).css("border-color", "#2eb82e");
+                    $('#submit').attr('disabled', false);
+                    $("#error_dob").text("");
+                }
+            });
+            $("#gender").focusout(function () {
+                $(this).css("border-color", "#2eb82e");
+
+            });
+            $("#pw").focusout(function () {
+                if ($(this).val() == '') {
+                    $(this).css("border-color", "#FF0000");
+                    $('#submit').attr('disabled', true);
+                    $("#error_pw").text("* 비밀번호를 입력하세요!");
+                } else {
+                    $(this).css({"border-color": "#2eb82e"});
+                    $('#submit').attr('disabled', false);
+                    $("#error_pw").text("");
+
+                }
+            });
+            $("#rpw").focusout(function () {
+                let pw = $("#pw").val()
+                if ($(this).val() == '') {
+                    $(this).css("border-color", "#FF0000");
+                    $('#submit').attr('disabled', true);
+                    $("#error_rpw").text("* 비밀번호를 입력하세요!");
+                } else if ($(this).val() != pw) {
+                    $(this).css("border-color", "#FF0000");
+                    $('#submit').attr('disabled', true);
+                    $("#error_rpw").text("* 비밀번호가 일치하지 않습니다!");
+                } else {
+                    $(this).css({"border-color": "#2eb82e"});
+                    $('#submit').attr('disabled', false);
+                    $("#error_rpw").text("");
+                }
+            });
+            $("#phone").focusout(function () {
+                $pho = $("#phone").val();
+                if ($(this).val() == '') {
+                    $(this).css("border-color", "#FF0000");
+                    $('#submit').attr('disabled', true);
+                    $("#error_phone").text("* 휴대전화 번호를 입력하세요!");
+                } else if ($pho.length != 11) {
+                    $(this).css("border-color", "#FF0000");
+                    $('#submit').attr('disabled', true);
+                    $("#error_phone").text("* 휴대전화 번호는 11자리 입력하세요!");
+                } else if (!$.isNumeric($pho)) {
+                    $(this).css("border-color", "#FF0000");
+                    $('#submit').attr('disabled', true);
+                    $("#error_phone").text("* 휴대전화 번호는 숫자여야 합니다!");
+                } else {
+                    $(this).css({"border-color": "#2eb82e"});
+                    $('#submit').attr('disabled', false);
+                    $("#error_phone").text("");
+                }
+            });
+
+            $("#submit").click(function () {
+                let id = $('#id').val()
+                let pw = $('#pw').val()
+                let myName = $('#myName').val()
+                let doc = $('#doc').val()
+                let gender = $('#gender').val()
+                let phone = $('#phone').val()
+                if ($("#myName").val() == '') {
+                    $("#myName").css("border-color", "#FF0000");
+                    $('#submit').attr('disabled', true);
+                    $("#error_name").text("* 이름을 입력하세요!");
+                }
+                if ($("#id").val() == '') {
+                    $("#id").css("border-color", "#FF0000");
+                    $('#submit').attr('disabled', true);
+                    $("#error_id").text("* 아이디를 입력하세요!");
+                }
+                if ($("#dob").val() == '') {
+                    $("#dob").css("border-color", "#FF0000");
+                    $('#submit').attr('disabled', true);
+                    $("#error_dob").text("* 생년월일을 입력하세요!");
+                }
+                if ($("#pw").val() == '') {
+                    $("#pw").css("border-color", "#FF0000");
+                    $('#submit').attr('disabled', true);
+                    $("#error_pw").text("* 비밀번호를 입력하세요!");
+                }
+                if ($("#rpw").val() == '') {
+                    $("#rpw").css("border-color", "#FF0000");
+                    $('#submit').attr('disabled', true);
+                    $("#error_rpw").text("* 비밀번호를 입력하세요!");
+                }
+                if ($("#phone").val() == '') {
+                    $("#phone").css("border-color", "#FF0000");
+                    $('#submit').attr('disabled', true);
+                    $("#error_phone").text("* 휴대전화 번호를 입력하세요!");
+                } else if ($("#phone").val() != '' && $("#rpw").val() != '' && $("#pw").val() != '' &&
+                    $("#dob").val() != '' && $("#id").val() != '' && $("#myName").val() != '') {
+                    $.ajax({
+                        type: "POST",
+                        url: "/review",
+                        data: {
+                            id_give: id,
+                            pw_give: pw,
+                            myName_give: myName,
+                            doc_give: doc,
+                            gender_give: gender,
+                            phone_give: phone
+                        },
+                        success: function (response) {
+                            swal({
+                                title: "회원가입 완료!",
+                                text: "",
+                                icon: "success",
+                            });
+                            setTimeout('go_url()', 1000)
+                        }
+                    })
+                }
+            });
+        });
+
+        function go_url() {
+
+            location.href = "/"
+
+        }
+
+
+        $.getScript("https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js", function () {
+            particlesJS('particles-js',
+                {
+                    "particles": {
+                        "number": {
+                            "value": 80,
+                            "density": {
+                                "enable": true,
+                                "value_area": 800
+                            }
+                        },
+                        "color": {
+                            "value": "#ffffff"
+                        },
+                        "shape": {
+                            "type": "circle",
+                            "stroke": {
+                                "width": 0,
+                                "color": "#000000"
+                            },
+                            "polygon": {
+                                "nb_sides": 5
+                            },
+                            "image": {
+                                "width": 100,
+                                "height": 100
+                            }
+                        },
+                        "opacity": {
+                            "value": 0.5,
+                            "random": false,
+                            "anim": {
+                                "enable": false,
+                                "speed": 1,
+                                "opacity_min": 0.1,
+                                "sync": false
+                            }
+                        },
+                        "size": {
+                            "value": 5,
+                            "random": true,
+                            "anim": {
+                                "enable": false,
+                                "speed": 40,
+                                "size_min": 0.1,
+                                "sync": false
+                            }
+                        },
+                        "line_linked": {
+                            "enable": true,
+                            "distance": 150,
+                            "color": "#ffffff",
+                            "opacity": 0.4,
+                            "width": 1
+                        },
+                        "move": {
+                            "enable": true,
+                            "speed": 6,
+                            "direction": "none",
+                            "random": false,
+                            "straight": false,
+                            "out_mode": "out",
+                            "attract": {
+                                "enable": false,
+                                "rotateX": 600,
+                                "rotateY": 1200
+                            }
+                        }
+                    },
+                    "interactivity": {
+                        "detect_on": "canvas",
+                        "events": {
+                            "onhover": {
+                                "enable": true,
+                                "mode": "repulse"
+                            },
+                            "onclick": {
+                                "enable": true,
+                                "mode": "push"
+                            },
+                            "resize": true
+                        },
+                        "modes": {
+                            "grab": {
+                                "distance": 400,
+                                "line_linked": {
+                                    "opacity": 1
+                                }
+                            },
+                            "bubble": {
+                                "distance": 400,
+                                "size": 40,
+                                "duration": 2,
+                                "opacity": 8,
+                                "speed": 3
+                            },
+                            "repulse": {
+                                "distance": 200
+                            },
+                            "push": {
+                                "particles_nb": 4
+                            },
+                            "remove": {
+                                "particles_nb": 2
+                            }
+                        }
+                    },
+                    "retina_detect": true,
+                    "config_demo": {
+                        "hide_card": false,
+                        "background_color": "#b61924",
+                        "background_image": "",
+                        "background_position": "50% 50%",
+                        "background_repeat": "no-repeat",
+                        "background_size": "cover"
+                    }
+                }
+            );
+
+        });
+
+
+    </script>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-6 col-sm-12 col-lg-6 col-md-offset-3">
+        <div class="panel panel-primary box">
+            <div class="panel-heading">한손리뷰 회원가입
+            </div>
+            <div class="panel-body">
+                <form action="/review" method="post" name="myform">
+                    <div class="form-group">
+                        <label for="id">아이디 *</label>
+                        <input id="id" name="id" class="form-control" type="text" data-validation="text">
+                        <span id="error_id" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="pw">비밀번호 *</label>
+                        <input id="pw" name="pw" class="form-control" type="password" data-validation="password">
+                        <span id="error_pw" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="rpw">비밀번호 재입력 *</label>
+                        <input id="rpw" name="rpw" class="form-control" type="password">
+                        <span id="error_rpw" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="myName">이름 *</label>
+                        <input id="myName" name="myName" class="form-control" type="text" data-validation="required">
+                        <span id="error_name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="dob">생년월일 *</label>
+                        <input type="date" name="dob" id="dob" class="form-control">
+                        <span id="error_dob" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">성별</label>
+                        <select name="gender" id="gender" class="form-control">
+                            <option selected>남성</option>
+                            <option>여성</option>
+                        </select>
+                        <span id="error_gender" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">휴대전화 번호</label>
+                        <input type="text" id="phone" name="phone" class="form-control">
+                        <span id="error_phone" class="text-danger"></span>
+                    </div>
+                    <div class="center">
+                        <button id="submit" type="button" value="submit" class="btn btn-primary">가입하기</button>
+                        <a href="/">
+                            <button id="cancel" type="button" value="cancel" class="cancel btn btn-primary">취소</button>
+                        </a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+</div>
+<div id="particles-js"></div>
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Common Css -->
+    <link rel="stylesheet" href="../static/review.css">
+    <link rel="shortcut icon" href="../static/movie.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+
+    <title>한손영화|모든 영화를 리뷰하다</title>
+
+    <!-- Import Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@100;200;300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <style>
+        .color {
+            color: black;
+        }
+
+        .font {
+            font-weight: bold;
+        }
+
+        .fontsize {
+            font-size: x-large;
+            font-family: 'Black Han Sans', sans-serif;
+        }
+
+        .mini {
+            font-size: large;
+        }
+
+    </style>
+
+    <script defer src="../static/java.js"></script>
+    <script defer src="../static/review.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            showReview();
+            avgrank();
+        });
+
+
+        function go_url() {
+
+            location.href = "/action_four"
+
+        }
+
+
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+
+        function showWrite(reviews) {
+            const popup = document.querySelector('#popup');
+
+            if (reviews) {
+                popup.classList.add('submit-review');
+            } else {
+                popup.classList.remove('submit-review');
+            }
+            popup.classList.remove('close');
+        }
+
+        function closePopup() {
+            const popup = document.querySelector('#popup');
+            popup.classList.add('close');
+        }
+
+        function submitPopup() {
+
+            let review = $('#review').val()
+            let rank = $('#rank').val()
+            var today2 = new Date();
+            var year = today2.getFullYear();
+            var month = ('0' + (today2.getMonth() + 1)).slice(-2);
+            var day = ('0' + today2.getDate()).slice(-2);
+            var hours = ('0' + today2.getHours()).slice(-2);
+            var minutes = ('0' + today2.getMinutes()).slice(-2);
+            var seconds = ('0' + today2.getSeconds()).slice(-2);
+            var dateString = year + '-' + month + '-' + day + '&nbsp' + hours + ':' + minutes + ':' + seconds;
+
+            const query = 'input[name="group"]:checked';
+            const selectedEls =
+                document.querySelectorAll(query);
+
+            // 선택된 목록에서 value 찾기
+            let result = '';
+            selectedEls.forEach((el) => {
+                result += el.value + ' ';
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/action4",
+                data: {
+                    review_give: review,
+                    result_give: result,
+                    rank_give: rank,
+                    dateString_give: dateString
+                },
+                success: function (response) {
+                    swal({
+                        title: response["msg"],
+                        text: "",
+                        icon: "success",
+                    });
+                    setTimeout('go_url()', 1000)
+                }
+            })
+        }
+
+        function showReview() {
+            $.ajax({
+                type: "GET",
+                url: "/action4-1",
+                data: {},
+                success: function (response) {
+                    let rv = response['all_reviews']
+                    for (let i = 0; i < rv.length; i++) {
+                        let review = rv[i]['review']
+                        let result = rv[i]['result']
+                        let rank = rv[i]['rank']
+                        let dateString = rv[i]['dateString']
+
+                        let temp_html = `
+       <div class="contents" >
+                      <li class="itemsC">
+                    <div class="contents">
+                        <div class="user-txt">
+                            <div class="user-id font">평점 : ${rank}</div>
+                            <div class="user-review font"><h3>${review}</h3></div>
+                            <div class="keyword2">
+                                <ul>
+                                    <li id="one2" class="font">단어 키워드</li><li class="fontsize"><br>${result}</li>
+                                    <br>
+                                    <li class="color font">${dateString}</li><br>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </li>     </div>                    `
+                        $('#reviews-box').append(temp_html)
+                    }
+                }
+            })
+        }
+
+        function maxLengthCheck(object) {
+            if (object.value.length > object.maxLength) {
+                object.value = object.value.slice(0, object.maxLength);
+            }
+        }
+
+        function avgrank() {
+            $.ajax({
+                type: "GET",
+                url: "/action4-rank",
+                data: {},
+                success: function (response) {
+                    let allrank = response['all_rank']
+                    let i;
+                    let sum = 0;
+                    for (i = 0; i < allrank.length; i++) {
+                        let avgrank = allrank[i]['rank']
+                        avgrank *= 1;
+                        sum += avgrank;
+                    }
+                    let avgrank2 = sum / allrank.length
+                    avgrank3 = avgrank2.toFixed(1)
+                    let temp_html = `<div>
+                    <p>| 평점 : ${avgrank3}</p></div>`
+
+                    $('#main-score').append(temp_html)
+                }
+            })
+        }
+
+    </script>
+</head>
+
+<body>
+<div class="wrapper">
+    <header>
+        <div class="top-bar">
+            <span class="nav" onclick="openNav()">&#x2b;</span>
+            <div class="movie-logo">
+                <a class="logo" href="/main" style="cursor:auto">
+                    <img src="../static/logo.png" alt="HanSon-movie">
+                </a>
+            </div>
+            <div id="mySidenav" class="sidenav">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="/romence">로맨스</a>
+                <a href="/action">액션</a>
+                <a href="/comedy">코미디</a>
+                <a href="/ani">애니</a>
+                <a href="/thriller">스릴러</a>
+            </div>
+        </div>
+    </header>
+    <!-- End of Header -->
+
+    <!-- Main Container -->
+    <section class="main-container">
+        <div class="inner">
+            <div class="card">
+                <a href="">
+                    <img src="https://movie-phinf.pstatic.net/20210707_1/1625644082274E6g2t_JPEG/movie_image.jpg?type=m665_443_2"></a>
+            </div>
+            <div class="main-info">
+                <div class="main-name">
+                    <h2 class="main-title mini">이스케이프 룸 2: 노 웨이 아웃</h2>
+                    <a class="more-btn" href="https://www.youtube.com/watch?v=7klDLgNG2Bc">보러가기 ></a>
+                </div>
+                <div class="main-score" id="main-score">
+                </div>
+                <div class="main-txt">
+                    <p>출구 없는 탈출 게임에서 가까스로 살아남은 ‘조이’와 ‘벤’.
+                        게임을 설계한 의문의 조직 ‘미노스’의 실체를 밝히기 위해
+                        뉴욕에 도착한 두 사람은 정체불명의 남자에게 휘말려 지하철에 갇히고 만다.
+                        순간 다른 칸과 분리된 열차 안에는 초고압 전류가 흐르기 시작하고,
+                        그곳에 있는 6명 모두 게임의 생존자라는 것이 밝혀진다.
+                        목숨을 건 탈출 게임이 다시 시작됐음을 직감한 그들은
+                        뉴욕을 배경으로 벌어지는 극한의 상황에서
+                        살아남기 위한 사투를 벌이는데….</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="popup" class="close">
+            <div class="review-container">
+                <div class="header">
+                    <a class="form-logo" style="cursor:auto">
+                        <img src="../static/logo.png" alt="HanSon-movie"></a>
+                    <h2 class="title">리뷰작성</h2>
+                </div>
+                <form id="reviews" method="POST" action="/action4">
+                    <input type="text"
+                           id="review"
+                           placeholder="한줄 감상문을 적어주세요(10글자 이내)" required maxlength="10">
+                    <div class="option-group">
+                        <label><input type="checkbox" id="one" value="무섭다"
+                                      name="group">무섭다</label>
+                        <label><input type="checkbox" id="two" value="잔인하다"
+                                      name="group">잔인하다</label>
+                        <label><input type="checkbox" id="three" value="두번볼듯"
+                                      name="group">두번볼듯</label>
+                        <label><input type="checkbox" id="four" value="재밌다"
+                                      name="group">재밌다</label>
+                        <label><input type="checkbox" id="five" value="더럽다"
+                                      name="group">더럽다</label>
+                        <label><input type="checkbox" id="six" value="인상깊다"
+                                      name="group">인상깊다</label>
+                        <label><input type="checkbox" id="seven" value="길었다"
+                                      name="group">길었다</label>
+                        <label><input type="checkbox" id="eight" value="돈아깝다"
+                                      name="group">돈아깝다</label>
+                        <label><input type="checkbox" id="nine" value="화난다"
+                                      name="group">화난다</label>
+                        <label><input type="checkbox" id="ten" value="흥미진진"
+                                      name="group">흥미진진</label>
+                        <label><input type="checkbox" id="eleven" value="재미없다"
+                                      name="group">재미없다</label>
+                        <label><input type="checkbox" id="twelve" value="설렌다"
+                                      name="group">설렌다</label>
+                        <label><input type="checkbox" id="thirteen" value="오싹하다"
+                                      name="group">오싹하다</label>
+                        <label><input type="checkbox" id="fourteen" value="지루하다"
+                                      name="group">지루하다</label>
+                        <label><input type="checkbox" id="fifteen" value="그냥그래"
+                                      name="group">그냥그래</label>
+                        <label>평점 : <input id="rank" type="number" max="10" min="1" required step="0.1"
+                                           maxlength="3" oninput="maxLengthCheck(this)"></label>
+                    </div>
+                    <div class="btn">
+                        <button class="submit-btn" onclick="submitPopup()" type="button" id="submit">등록하기</button>
+                        <button class="close-btn" onclick="closePopup()" id="close">닫기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <button class="write-btn" onclick="showWrite()">리뷰쓰기 ></button>
+        <div class="scrolly">
+            <button id="left"><span class="material-icons">chevron_left</span></button>
+            <button id="right"><span class="material-icons">chevron_right</span></button>
+            <ul class="carouselPre" id="reviews-box">
+            </ul>
+        </div>
+    </section>
+</div>
+
+
+</body>
+</html>
